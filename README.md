@@ -471,6 +471,38 @@ $ sudo make install
 
 With `Fmcomms2_Signal_Source` you can use any SDR hardware based on [FMCOMMS2](https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz), including the ADALM-PLUTO (PlutoSdr) by configuring correctly the .conf file. The `Plutosdr_Signal_Source` offers a simpler manner to use the ADALM-PLUTO because implements only a subset of FMCOMMS2's parameters valid for those devices.
 
+###### Build YunSDR based SDR Hardware support (OPTIONAL):
+
+Install the [libyunsdr](https://github.com/v3best/libyunsdr.git) and [gr-yunsdr](https://github.com/v3best/gr-yunsdr.git) gnuradio block:
+
+~~~~~~
+$ git clone https://github.com/analogdevicesinc/libyunsdr.git
+$ cd libyunsdr
+$ mkdir build
+$ cd build
+$ cmake ..
+$ make && sudo make install && sudo ldconfig
+$ cd ../..
+$ git clone https://github.com/v3best/gr-yunsdr.git
+$ cd gr-yunsdr
+$ mkdir build
+$ cd build
+$ cmake -DCMAKE_INSTALL_PREFIX=<gnuradio install prefix> ..
+$ make && make install && sudo ldconfig
+$ cd ../..
+~~~~~~
+
+Then configure GNSS-SDR to build the `YunSDR_Signal_Source` implementation:
+
+~~~~~~
+$ cd gnss-sdr/build
+$ cmake -DENABLE_YUNSDR=ON ../
+$ make
+$ sudo make install
+~~~~~~
+
+With `YunSDR_Signal_Source` you can use the YunSDR by configuring correctly the .conf file. The `YunSDR_Signal_Source` offers a simpler manner to use the YunSDR.
+
 ###### Build OpenCL support (OPTIONAL):
 
 In order to enable the building of blocks that use OpenCL, type:

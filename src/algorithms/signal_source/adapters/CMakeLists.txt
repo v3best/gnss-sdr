@@ -21,6 +21,21 @@ list(SORT SIGNAL_SOURCE_ADAPTER_HEADERS)
 
 # Optional drivers
 
+if(ENABLE_YUNSDR)
+   find_package(yunsdr REQUIRED)
+   if(NOT YUNSDR_FOUND)
+      message(STATUS "gnuradio-yunsdr not found, its installation is required.")
+      message(STATUS "Please build and install the following projects:")
+      message(STATUS " * libyunsdr from https://github.com/v3best/libyunsdr")
+      message(STATUS " * gnuradio-yunsdr from https://github.com/v3best/gr-yunsdr")
+      message(FATAL_ERROR "gnuradio-yunsdr required for building gnss-sdr with this option enabled")
+   endif(NOT YUNSDR_FOUND)
+   set(OPT_LIBRARIES ${OPT_LIBRARIES} ${YUNSDR_LIBRARIES})
+   set(OPT_DRIVER_INCLUDE_DIRS ${OPT_DRIVER_INCLUDE_DIRS} ${YUNSDR_INCLUDE_DIRS})
+   set(OPT_DRIVER_SOURCES ${OPT_DRIVER_SOURCES} yunsdr_signal_source.cc)
+endif(ENABLE_YUNSDR)
+
+
 if(ENABLE_PLUTOSDR OR ENABLE_FMCOMMS2)
    find_package(iio REQUIRED)
    if(NOT IIO_FOUND)

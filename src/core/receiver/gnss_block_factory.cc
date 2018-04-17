@@ -136,6 +136,10 @@
 #include "fmcomms2_signal_source.h"
 #endif
 
+#if YUNSDR_DRIVER
+#include "yunsdr_signal_source.h"
+#endif
+
 #if FLEXIBAND_DRIVER
 #include "flexiband_signal_source.h"
 #endif
@@ -1183,6 +1187,15 @@ std::unique_ptr<GNSSBlockInterface> GNSSBlockFactory::GetBlock(
     else if (implementation.compare("Fmcomms2_Signal_Source") == 0)
         {
             std::unique_ptr<GNSSBlockInterface> block_(new Fmcomms2SignalSource(configuration.get(), role, in_streams,
+                out_streams, queue));
+            block = std::move(block_);
+        }
+#endif
+
+#if YUNSDR_DRIVER
+    else if (implementation.compare("YunSDR_Signal_Source") == 0)
+        {
+            std::unique_ptr<GNSSBlockInterface> block_(new YunSDRSignalSource(configuration.get(), role, in_streams,
                 out_streams, queue));
             block = std::move(block_);
         }
